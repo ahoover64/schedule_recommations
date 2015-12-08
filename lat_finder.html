@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {
+                    padding: 0;
+                        margin: 0;
+                    }
+                    html, body{
+                            height: 100%;
+                        }
+                    }
+            }
+        </style>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+        <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+    </head>
+    <body>
+        <div id="map" style="width: 100%; height: 100%"></div>
+        <input type="radio" name="layer" value="Marker" checked> Marker<br>
+        <input type="radio" name="layer" value="Polygons"> Polygones<br>
+
+        <script>
+            var mapLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {minZoom: 16, maxZoom: 18, attribution: 'Map data � <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'});
+            var map = L.map('map', {layers: [mapLayer]}).setView([43.08433, -77.6767], 11);
+            var polygon = [];
+            var baseMaps = {
+                'RIT': mapLayer
+            }
+            var popup = L.popup();
+            function getActiveLayer() {
+                var elements = document.getElementsByName('layer');
+                for (i=0;i<elements.length;i++) {
+                    if(elements[i].checked === true) {
+                        return elements[i].value;
+                    }
+                }
+            }
+            function onMapClick(e) {
+                if(getActiveLayer() === 'Marker')
+                {
+                    popup.setLatLng(e.latlng)
+                    .setContent( e.latlng.toString())
+                    .openOn(map);
+                    L.marker(e.latlng).addTo(map);
+                }
+                else {
+
+                }
+            }
+            map.on('click', onMapClick);
+        </script>
+    </body>
+</html>
