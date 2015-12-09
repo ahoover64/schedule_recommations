@@ -5,14 +5,14 @@ var baseMaps = {
     'RIT': mapLayer
 }
 var locs = new Array();
-locs.push({name:"Java's", min_time:1, max_time:3, lat:43.08402064117729, long:-77.6761668920517});
-locs.push({name:"Midnight Oil / Cross Roads", min: 1, max: 3, lat: 43.08265719062045, lng: -77.68001854419708});
-locs.push({name:"Library", min: 1, max: 4, lat: 43.08265719062045, lng: -77.68001854419708});
-locs.push({name:"Gracie's", min: 1, max: 1, lat: 43.08402064117729, lng: -77.6761668920517});
-locs.push({name:"Ctrl-Alt-Deli", min: 1, max: 1, lat: 43.08265719062045, lng: -77.68001854419708});
-locs.push({name:"Freshen's", min: 1, max: 2, lat: 43.08402064117729, lng: -77.6761668920517});
-locs.push({name:"Dorms", min: 3, max: 100, lat: 43.08265719062045, lng: -77.68001854419708});
-locs.push({name:"Global Village Grille", min: 1, max: 2, lat: 43.08402064117729, lng: -77.6761668920517});
+locs.push({name:"Java's", min_time:1, max_time:3, lat:43.08412, lng: -77.67627});
+locs.push({name:"Midnight Oil / Cross Roads", min: 1, max: 3, lat: 43.08258, lng: -77.67972});
+locs.push({name:"Library", min: 1, max: 4, lat: 43.08393, lng: -77.6763});
+locs.push({name:"Gracie's", min: 1, max: 1, lat: 43.08386, lng: -77.66904});
+locs.push({name:"Ctrl-Alt-Deli", min: 1, max: 1, lat: 43.08461, lng: -77.6801});
+locs.push({name:"Freshen's", min: 1, max: 2, lat: 43.08551, lng: -77.67913});
+locs.push({name:"Dorms", min: 3, max: 100, lat: 43.08542, lng: -77.66897});
+locs.push({name:"Global Village Grille", min: 1, max: 2, lat: 43.08305, lng: -77.68046});
 
 var classes = new Array();
 
@@ -85,14 +85,14 @@ function makeSchedule() {
   var min_dist;
   for(i=1;i<classes.length;i++) {
     time_diff = classes[i].start_time - classes[i-1].end_time;
-    t = Math.round(time_diff / 100);
+    t = Math.round(time_diff / 100.0);
     dist_sorted = locs;
     for(j=0;j<locs.length;j++) {
       min = j;
-      min_dist = 99999999.9;
+      min_dist = -1.0;
       for(k=j;k<locs.length;k++) {
-        dist = Math.sqrt(Math.pow(classes[i].lat - locs[k].lat,2) + Math.pow(classes[i].long - locs[k].long,2)) + Math.sqrt(Math.pow(classes[i-1].lat - locs[k].lat,2) + Math.pow(classes[i-1].long - locs[k].long,2));
-        if(dist < min_dist) {
+        dist = Math.sqrt(Math.pow(classes[i].lat - locs[k].lat,2) + Math.pow(classes[i].lng - locs[k].lng,2)) + Math.sqrt(Math.pow(classes[i-1].lat - locs[k].lat,2) + Math.pow(classes[i-1].lng - locs[k].lng,2));
+        if(dist < min_dist || min_dist == -1.0) {
           min_dist = dist;
           min = k;
         }
