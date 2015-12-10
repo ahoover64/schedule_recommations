@@ -30,8 +30,18 @@ function getActiveLayer() {
 function onMapClick(e) {
   var start = prompt("Enter what time you class starts", "8:00 am");
   var shour = Math.floor(start.split(":")[0]);
-  var smin = Math.floor(start.split(":")[1].split(" ")[0]);
-  var t = (start.indexOf("pm") > -1 && !(shour == 12));
+  if(shour > 99) {
+    var smin = shour % 100;
+    shour = shour / 100;
+    var t = false;
+  } else if(shour>12) {
+    shour = shour - 12;
+    var smin = Math.floor(start.split(":")[1].split(" ")[0]);
+    var t = true;
+  } else {
+    var smin = Math.floor(start.split(":")[1].split(" ")[0]);
+    var t = (start.indexOf("pm") > -1 && !(shour == 12));
+  }
   if(t) {
     var smorning = 1200;
   } else {
@@ -39,16 +49,28 @@ function onMapClick(e) {
   }
   var end = prompt("Enter what time you class ends", "" + (shour + 1) + ":00" + " am");
   var ehour = Math.floor(end.split(":")[0]);
-  var emin = Math.floor(end.split(":")[1].split(" ")[0]);
-  t = (end.indexOf("pm") > -1 && !(ehour == 12));
+  if(ehour > 99) {
+    var emin = ehour % 100;
+    ehour = ehour / 100;
+    var t = false;
+  } else if(ehour>12) {
+    ehour = ehour - 12;
+    var emin = Math.floor(end.split(":")[1].split(" ")[0]);
+    var t = true;
+  } else {
+    var emin = Math.floor(end.split(":")[1].split(" ")[0]);
+    var t = (end.indexOf("pm") > -1 && !(ehour == 12));
+  }
   if(t) {
     var emorning = 1200;
   } else {
     var emorning = 0;
   }
-  classes.push({start_time: shour*100 + smin + smorning, end_time: ehour*100 + emin + emorning, lat: e.latlng.lat, lng: e.latlng.lng});
+  var st = shour*100 + smin + smorning;
+  var et = ehour*100 + emin + emorning;
+  classes.push({start_time: st, end_time: et, lat: e.latlng.lat, lng: e.latlng.lng});
   popup.setLatLng(e.latlng)
-  .setContent("Class created at " + shour + ":" + smin + " till " + ehour + ":" + emin)
+  .setContent("Class created from " + st + " till " + et)
   .openOn(map);
   L.marker(e.latlng).addTo(map);
 }
@@ -73,10 +95,6 @@ function sortClasses() {
 function makeSchedule() {
   sortClasses();
   var str = "";
-  /*for(i=0;i<classes.length;i++) {
-    str += classes[i].start_time + ', ' + classes[i].end_time + ', ' + classes[i].lat  + ', ' + classes[i].lng +'<br>';
-  }
-  document.getElementById("sched").innerHTML = str;*/
   var time_diff;
   var t;
   var temp;
